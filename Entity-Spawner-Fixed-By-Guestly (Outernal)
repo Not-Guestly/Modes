@@ -134,8 +134,12 @@ local Module = {
 -- \\ Functions // --
 
 local function CloneTable(tbl: any): any
+    if typeof(tbl) ~= "table" then
+        return tbl
+    end
+
     local new = {}
-    for key, value in next, tbl do
+    for key, value in pairs(tbl) do
         if typeof(value) == "table" then
             new[key] = CloneTable(value)
         else
@@ -146,8 +150,12 @@ local function CloneTable(tbl: any): any
 end
 
 function ApplyConfigDefaults(tbl, defaults)
+    tbl = (typeof(tbl) == "table") and tbl or {}
+    defaults = (typeof(defaults) == "table") and defaults or {}
+
     local new = CloneTable(tbl)
-    for key, value in next, defaults do
+
+    for key, value in pairs(defaults) do
         if new[key] == nil then
             if typeof(value) == "table" then
                 new[key] = CloneTable(value)
@@ -162,6 +170,7 @@ function ApplyConfigDefaults(tbl, defaults)
             new[key] = ApplyConfigDefaults(new[key], value)
         end
     end
+
     return new
 end
 
