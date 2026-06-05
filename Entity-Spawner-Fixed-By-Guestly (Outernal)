@@ -610,7 +610,8 @@ LocalPlayer.CharacterAdded:Connect(OnCharacterAdded)
 
 Module.Create = function(self, config: any): any?
     local newConfig = ApplyConfigDefaults(config, CONST.DEFAULT.CONFIG)
-    newConfig.Movement.Speed = CONST.BASE_ENTITY_SPEED / 100 * config.Movement.Speed
+    local movement = config.Movement or {}
+newConfig.Movement.Speed = CONST.BASE_ENTITY_SPEED / 100 * (movement.Speed or CONST.DEFAULT.CONFIG.Movement.Speed)
 
     -- Fetch entity model
     local asset = newConfig.Entity.Asset
